@@ -1,5 +1,7 @@
 package model.pieces;
 
+import util.*;
+
 public class ChessPiece {
 	public boolean isBlack;
 	
@@ -8,6 +10,11 @@ public class ChessPiece {
 	}
 	
 	public String toString() {
-		return this.isBlack ? "b" : "w";
+		return this.isBlack ? ChessNamingConstants.BLACK_PIECE : ChessNamingConstants.WHITE_PIECE;
+	}
+	
+	public boolean isValidMove(ChessCoordinatePair from, ChessCoordinatePair to) {
+		
+		return false;
 	}
 }

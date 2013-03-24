@@ -1,6 +1,6 @@
 package model.pieces;
 
-import util.ChessConstants;
+import util.ChessNamingConstants;
 
 public class KnightChessPiece extends ChessPiece {
 	
@@ -9,6 +9,6 @@ public class KnightChessPiece extends ChessPiece {
 	}
 	
 	public String toString() {
-		return super.toString() + ChessConstants.KNIGHT_PIECE_NAME_CHARACTER;
+		return super.toString() + ChessNamingConstants.KNIGHT;
 	}
 }

@@ -1,7 +1,7 @@
 package model.board;
 
 import model.pieces.ChessPiece;
-import util.ChessCoordinatePair;
+import util.*;
 
 public class ChessBoardSquare {
 	public final ChessCoordinatePair location;
@@ -18,19 +18,11 @@ public class ChessBoardSquare {
 
 	public String toString() {
 		if (this.piece == null) {
-			if (this.location.file % 2 == 0 && this.location.rank % 2 == 0) {
-				return "  ";
-			} else if (this.location.file % 2 == 0
-					&& this.location.rank % 2 != 0) {
-				return "##";
-			} else if (this.location.file % 2 != 0
-					&& this.location.rank % 2 == 0) {
-				return "##";
-			} else if (this.location.file % 2 != 0
-					&& this.location.rank % 2 != 0) {
-				return "  ";
+			if ((this.location.file % 2 == 0 && this.location.rank % 2 == 0)
+					|| (this.location.file % 2 != 0 && this.location.rank % 2 != 0)) {
+				return ChessNamingConstants.WHITE_SQUARE;
 			} else {
-				return "XX";
+				return ChessNamingConstants.BLACK_SQUARE;
 			}
 		} else {
 			return this.piece.toString();

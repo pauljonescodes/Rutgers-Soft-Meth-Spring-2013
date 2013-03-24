@@ -5,37 +5,47 @@ public class ChessCoordinatePair {
 	public int file;
 
 	/**
-	 * Each square of the chessboard is identified by a unique coordinate pairÑa
-	 * letter and a number. The vertical column of squares (called files) from
-	 * White's left (the queenside) to his right (the kingside) are labeled a
-	 * through h. The horizontal rows of squares (called ranks) are numbered 1
-	 * to 8 starting from White's side of the board. Thus each square has a
-	 * unique identification of file letter followed by rank number. (For
-	 * example, White's king starts the game on square e1; Black's knight on b8
-	 * can move to open squares a6 or c6.)
 	 * 
 	 * @param rank
+	 *            horizontal rows of squares labeled 1 to 8
 	 * @param file
+	 *            vertical column of squares labeled a through h
 	 */
+	public ChessCoordinatePair(char rank, char file) throws InvalidCoordinateException {
+		int rankInt = Integer.parseInt(rank + "") - 1;
+		int fileInt = file - 'a';
+		
+		if (rankInt > 7) {
+			throw new InvalidCoordinateException("Your rank is too high.");
+		} else if (fileInt > 7) {
+			throw new InvalidCoordinateException("Your file is too high.");
+		} else {
+			this.rank = rankInt;
+			this.file = fileInt;
+		}
+	}
+	
 	public ChessCoordinatePair(int rank, int file) {
 		this.rank = rank;
 		this.file = file;
 	}
-	
+
 	public boolean isXYAdjacentTo(ChessCoordinatePair ccp) {
 		if (this.equals(ccp)) {
 			return false;
 		} else if (this.isDiagonalFrom(ccp)) {
 			return false;
-		} else if (this.hasSameFileAs(ccp) && (ccp.rank - 1 == this.rank || ccp.rank + 1 == this.rank)) {
+		} else if (this.hasSameFileAs(ccp)
+				&& (ccp.rank - 1 == this.rank || ccp.rank + 1 == this.rank)) {
 			return true;
-		} else if (this.hasSameRankAs(ccp) && (ccp.file - 1 == this.file || ccp.file + 1 == this.file)) {
+		} else if (this.hasSameRankAs(ccp)
+				&& (ccp.file - 1 == this.file || ccp.file + 1 == this.file)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public boolean isDiagonalFrom(ChessCoordinatePair ccp) {
 		if (this.equals(ccp)) {
 			return false;
@@ -53,7 +63,7 @@ public class ChessCoordinatePair {
 			return false;
 		}
 	}
-	
+
 	public boolean hasSameRankAs(ChessCoordinatePair ccp) {
 		if (this.rank == ccp.rank)
 			return true;
@@ -67,13 +77,13 @@ public class ChessCoordinatePair {
 		else
 			return false;
 	}
-	
+
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof ChessCoordinatePair)) {
 			return false;
 		} else {
 			ChessCoordinatePair ccp = ((ChessCoordinatePair) o);
-			
+
 			if (this.hasSameFileAs(ccp) && this.hasSameRankAs(ccp)) {
 				return true;
 			} else {

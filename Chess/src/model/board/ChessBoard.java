@@ -1,6 +1,6 @@
 package model.board;
 
-import util.ChessCoordinatePair;
+import util.*;
 import model.pieces.*;
 
 public class ChessBoard {
@@ -14,6 +14,7 @@ public class ChessBoard {
 
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
+
 				board[i][j] = new ChessBoardSquare(
 						new ChessCoordinatePair(i, j), null);
 
@@ -31,13 +32,13 @@ public class ChessBoard {
 					}
 				} else if (i == 1 || i == 6) {
 					board[i][j].piece = new PawnChessPiece(i == 1);
-				} 
+				}
 			}
 		}
 	}
 
 	public void makeMove(ChessCoordinatePair ccpone, ChessCoordinatePair ccptwo)
-			throws ChessBoardMoveException {
+			throws InvalidMoveException {
 	}
 
 	public String toString() {
