@@ -1,14 +1,14 @@
 package model.pieces;
 
+import util.ChessConstants;
 
 public class BishopChessPiece extends ChessPiece {
-	public static final String BISHOP_PIECE_NAME_CHARACTER = "B";
 	
 	public BishopChessPiece(boolean isBlack) {
 		super(isBlack);
 	}
 	
 	public String toString() {
-		return super.toString() + BISHOP_PIECE_NAME_CHARACTER;
+		return super.toString() + ChessConstants.BISHOP_PIECE_NAME_CHARACTER;
 	}
 }

@@ -1,14 +1,14 @@
 package model.pieces;
 
+import util.ChessConstants;
+
 public class RookChessPiece extends ChessPiece {
-	
-	public static final String ROOK_PIECE_NAME_CHARACTER = "R";
 	
 	public RookChessPiece(boolean isBlack) {
 		super(isBlack);
 	}
 	
 	public String toString() {
-		return super.toString() + ROOK_PIECE_NAME_CHARACTER;
+		return super.toString() + ChessConstants.ROOK_PIECE_NAME_CHARACTER;
 	}
 }
