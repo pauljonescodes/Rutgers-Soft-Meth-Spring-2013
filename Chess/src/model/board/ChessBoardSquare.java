@@ -1,0 +1,39 @@
+package model.board;
+
+import model.pieces.ChessPiece;
+import util.ChessCoordinatePair;
+
+public class ChessBoardSquare {
+	public final ChessCoordinatePair location;
+	public ChessPiece piece;
+
+	public ChessBoardSquare(ChessCoordinatePair location, ChessPiece piece) {
+		this.location = location;
+		this.piece = piece;
+	}
+
+	public boolean isOccupied() {
+		return this.piece == null;
+	}
+
+	public String toString() {
+		if (this.piece == null) {
+			if (this.location.file % 2 == 0 && this.location.rank % 2 == 0) {
+				return "  ";
+			} else if (this.location.file % 2 == 0
+					&& this.location.rank % 2 != 0) {
+				return "##";
+			} else if (this.location.file % 2 != 0
+					&& this.location.rank % 2 == 0) {
+				return "##";
+			} else if (this.location.file % 2 != 0
+					&& this.location.rank % 2 != 0) {
+				return "  ";
+			} else {
+				return "XX";
+			}
+		} else {
+			return this.piece.toString();
+		}
+	}
+}
