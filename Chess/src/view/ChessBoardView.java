@@ -26,10 +26,16 @@ public class ChessBoardView {
 				vc.makeMove(rankOne, fileOne, rankTwo, fileTwo);
 			} catch (InvalidCoordinateException ice) {
 				System.out.println(ice.getMessage());
+			} catch (InvalidMoveException ime) {
+				System.out.println(ime.getMessage());
 			}
 		}
 		
 		moveCount++;
+	}
+	
+	public int getMoveCount() {
+		return moveCount;
 	}
 	
 	public void printBoard() {

@@ -16,12 +16,23 @@ public class ChessBoardViewController {
 	}
 
 	public void makeMove(char rankOne, char fileOne, char rankTwo, char fileTwo)
-			throws InvalidCoordinateException {
+			throws InvalidCoordinateException, InvalidMoveException {
+		ChessCoordinatePair ccpone;
+		ChessCoordinatePair ccptwo;
+
 		try {
-			ChessCoordinatePair ccpone = new ChessCoordinatePair(fileOne, rankOne);
-			ChessCoordinatePair ccptwo = new ChessCoordinatePair(fileTwo, rankTwo);
+			ccpone = new ChessCoordinatePair(fileOne, rankOne);
+			ccptwo = new ChessCoordinatePair(fileTwo, rankTwo);
 		} catch (InvalidCoordinateException ice) {
 			throw ice;
+		}
+
+		if (ccpone != null && ccptwo != null) {
+			try {
+				board.makeMove(ccpone, ccptwo);
+			} catch (InvalidMoveException ime) {
+				throw ime;
+			}
 		}
 	}
 

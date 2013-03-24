@@ -4,25 +4,44 @@ public class ChessCoordinatePair {
 	public int rank;
 	public int file;
 
-	/**
-	 * 
-	 * @param rank
-	 *            horizontal rows of squares labeled 1 to 8
-	 * @param file
-	 *            vertical column of squares labeled a through h
-	 */
 	public ChessCoordinatePair(char rank, char file) throws InvalidCoordinateException {
-		int rankInt = Integer.parseInt(rank + "") - 1;
-		int fileInt = file - 'a';
+		int rankInt = this.getRankIntFrom(rank);
+		int fileInt = this.getFileIntFrom(file);
 		
 		if (rankInt > 7) {
-			throw new InvalidCoordinateException("Your rank is too high.");
+			throw new InvalidCoordinateException("Invalid coordinate, your rank is too high.");
 		} else if (fileInt > 7) {
-			throw new InvalidCoordinateException("Your file is too high.");
+			throw new InvalidCoordinateException("Invalid coordinate, your file is too high.");
 		} else {
 			this.rank = rankInt;
 			this.file = fileInt;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param rank a character that is '1', '2', ... '8'
+	 * @return an intger greater than zero and less than 7
+	 */
+	private int getRankIntFrom(char rank) {
+		return Integer.parseInt(rank + "") - 1;
+	}
+	
+	/**
+	 * 
+	 * @param file a character that is 'a', 'b', ... 'h'
+	 * @return an intger greater than zero and less than 7
+	 */
+	private int getFileIntFrom(char file) {
+		return Character.toLowerCase(file) - 'a';
+	}
+	
+	private char getRankCharFrom(int rank) {
+		return Character.forDigit(rank + 1, 10);
+	}
+	
+	private char getFileCharFrom(int file) {
+		return (char)(file + 'a');
 	}
 	
 	public ChessCoordinatePair(int rank, int file) {
@@ -91,4 +110,10 @@ public class ChessCoordinatePair {
 			}
 		}
 	}
+	
+	public String toString() {
+		return this.getFileCharFrom(this.file) + "" + this.getRankCharFrom(this.rank);
+	}
+	
+	
 }

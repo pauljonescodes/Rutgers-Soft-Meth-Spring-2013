@@ -37,8 +37,9 @@ public class ChessBoard {
 		}
 	}
 
-	public void makeMove(ChessCoordinatePair ccpone, ChessCoordinatePair ccptwo)
+	public void makeMove(ChessCoordinatePair from, ChessCoordinatePair to)
 			throws InvalidMoveException {
+		
 	}
 
 	public String toString() {
