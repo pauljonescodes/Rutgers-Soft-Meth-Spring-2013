@@ -15,11 +15,20 @@ public class ChessBoardViewController {
 		gameHasConcluded = true;
 	}
 
-	public void makeMove(char rankOne, char fileOne, char rankTwo, char fileTwo)
+	public void makeMove(char rankOne, char fileOne, char rankTwo, char fileTwo, String promotion)
 			throws InvalidCoordinateException, InvalidMoveException {
 		ChessCoordinatePair ccpone;
 		ChessCoordinatePair ccptwo;
 
+		if (promotion != null) {
+			if (!(promotion.equals(ChessNamingConstants.ROOK)
+					|| promotion.equals(ChessNamingConstants.KNIGHT)
+					|| promotion.equals(ChessNamingConstants.QUEEN)
+					|| promotion.equals(ChessNamingConstants.BISHOP))) {
+				throw new InvalidMoveException("Not a valid promotion selection.");
+			}
+		}
+		
 		try {
 			ccpone = new ChessCoordinatePair(fileOne, rankOne);
 			ccptwo = new ChessCoordinatePair(fileTwo, rankTwo);
@@ -29,7 +38,7 @@ public class ChessBoardViewController {
 
 		if (ccpone != null && ccptwo != null) {
 			try {
-				board.makeMove(ccpone, ccptwo);
+				board.makeMove(ccpone, ccptwo, promotion);
 			} catch (InvalidMoveException ime) {
 				throw ime;
 			}
@@ -38,5 +47,9 @@ public class ChessBoardViewController {
 
 	public String getBoardString() {
 		return this.board.toString();
+	}
+
+	public boolean isBlackTurn() {
+		return board.getIsBlackTurn();
 	}
 }

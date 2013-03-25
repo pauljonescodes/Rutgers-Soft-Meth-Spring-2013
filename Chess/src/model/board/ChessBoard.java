@@ -8,16 +8,30 @@ public class ChessBoard {
 	public static final int NUMBER_OF_FILES = 8;
 
 	private ChessBoardSquare[][] board;
+	public boolean isBlackTurn = true;
+	public int moveCount = 0;
 
+	/**
+	 * Initializes and empty board.
+	 */
 	public ChessBoard() {
 		board = new ChessBoardSquare[NUMBER_OF_RANKS][NUMBER_OF_FILES];
-
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-
 				board[i][j] = new ChessBoardSquare(
 						new ChessCoordinatePair(i, j), null);
+			}
+		}
 
+		this.loadStandardBoard();
+	}
+
+	/**
+	 * Loads the standard chess board onto an already initialized board.
+	 */
+	private void loadStandardBoard() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
 				if (i == 0 || i == 7) {
 					if (j == 0 || j == 7) {
 						board[i][j].piece = new RookChessPiece(i == 0);
@@ -37,11 +51,189 @@ public class ChessBoard {
 		}
 	}
 
-	public void makeMove(ChessCoordinatePair from, ChessCoordinatePair to)
+	/**
+	 * Attempts to make the move dictated by the inputs.
+	 * 
+	 * @param startAddress
+	 *            a valid ChessCoordinatePair which may or may not have a piece
+	 *            on it.
+	 * @param endAddress
+	 *            a valid ChessCoordinatePair which may or may not have a piece
+	 *            on it.
+	 * @param ChessPieceConstant
+	 *            for promotion of pawns, null every other time.
+	 * @throws InvalidMoveException
+	 *             if there is no piece on the start square, or if it isn't the
+	 *             present player's piece, or if they're trying to take their
+	 *             own piece, or if it just generally an invalid movement.
+	 */
+	public void makeMove(ChessCoordinatePair startAddress,
+			ChessCoordinatePair endAddress, String ChessPieceConstant)
 			throws InvalidMoveException {
-		
+		ChessBoardSquare startSquare = this.squareAt(startAddress);
+		ChessBoardSquare endSquare = this.squareAt(endAddress);
+		ChessPiece movingPiece = startSquare.piece;
+		ChessPiece takenPiece = endSquare.piece;
+
+		PieceSpecialCases special = new PieceSpecialCases();
+
+		special.isCapturing = takenPiece == null ? false : true;
+		special.isPromoting = ChessPieceConstant == null ? false : true;
+		special.pieceInPath = this.boardHasPieceInPathBetween(startAddress,
+				endAddress);
+
+		if (startAddress.equals(endAddress)) {
+			throw new InvalidMoveException(
+					"You cannot move from and to the same square.");
+		} else if (movingPiece == null) {
+			throw new InvalidMoveException("There is no piece there.");
+		} else if (movingPiece.isBlack != this.getIsBlackTurn()) {
+			throw new InvalidMoveException("That is not your piece");
+		} else if (takenPiece != null
+				&& (takenPiece.isBlack == this.getIsBlackTurn())) {
+			throw new InvalidMoveException("You cannot take your own piece.");
+		} else if (movingPiece.isValidMove(startAddress, endAddress, special)) {
+			this.move(startAddress, endAddress);
+
+			if (special.isPromoting) {
+				board[endAddress.rank][endAddress.file].piece = this
+						.getChessPieceFrom(ChessPieceConstant);
+			}
+
+		} else {
+			throw new InvalidMoveException(
+					"That is not a valid move for this piece.");
+		}
 	}
 
+	/**
+	 * For promotion only! The boolean is "notted" because the move hasn't
+	 * happened yet.
+	 * 
+	 * @param CHESS_PIECE_CONSTANT
+	 *            a String that is a "R", "N", "B", or "Q" only.
+	 * @return the ChessPiece that character represents
+	 */
+	private ChessPiece getChessPieceFrom(String CHESS_PIECE_CONSTANT) {
+		if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.ROOK)) {
+			return new RookChessPiece(!this.isBlackTurn);
+		} else if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.KNIGHT)) {
+			return new KnightChessPiece(!this.isBlackTurn);
+		} else if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.BISHOP)) {
+			return new BishopChessPiece(!this.isBlackTurn);
+		} else if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.QUEEN)) {
+			return new QueenChessPiece(!this.isBlackTurn);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * For valid moves only! This method will do exactly what its told. It will
+	 * also increment the movement count and update the player whose turn it is,
+	 * so be careful.
+	 */
+	private void move(ChessCoordinatePair startAddress,
+			ChessCoordinatePair endAddress) {
+		this.board[endAddress.rank][endAddress.file].piece = this.board[startAddress.rank][startAddress.file].piece;
+		this.board[startAddress.rank][startAddress.file].piece = null;
+		this.moveCount++;
+		this.isBlackTurn = (moveCount % 2 == 0);
+	}
+
+	/**
+	 * This checks the horizontal, vertical, and diagonal paths between the two
+	 * inputed points and returns true if there is a piece in between those two
+	 * points.
+	 * 
+	 * @param startAddress
+	 *            The address that the possible path would start
+	 * @param endAddress
+	 *            The address that the possible path would end
+	 * @return A boolean representing whether there is something between the two
+	 *         points
+	 */
+	private boolean boardHasPieceInPathBetween(
+			ChessCoordinatePair startAddress, ChessCoordinatePair endAddress) {
+
+		if (ChessNamingConstants.DEVELOPMENT) {
+			System.out.println("boardHasPieceInPathBetween(" + startAddress
+					+ ", " + endAddress + ");");
+			System.out.println("\tstartAddress.rank = " + startAddress.rank);
+			System.out.println("\tstartAddress.file = " + startAddress.file);
+			System.out.println("\tendAddress.rank = " + endAddress.rank);
+			System.out.println("\tendAddress.file = " + endAddress.file);
+		}
+
+		if (startAddress.hasSameFileAs(endAddress)) {
+			for (int i = startAddress.rank + 1; i < endAddress.rank; i++) {
+				if (board[i][startAddress.file].isOccupied()) {
+					return true;
+				}
+			}
+		} else if (startAddress.hasSameRankAs(endAddress)) {
+			for (int i = startAddress.file + 1; i < endAddress.file; i++) {
+				if (board[startAddress.rank][i].isOccupied()) {
+					return true;
+				}
+			}
+		} else if (startAddress.isDiagonalTo(endAddress)) {
+
+			if (ChessNamingConstants.DEVELOPMENT) {
+				System.out.printf("\n\t\t\t%s isDiagonalTo %s\n", startAddress.toString(), endAddress.toString());
+			}
+			
+			if (startAddress.isAdjacentTo(endAddress)) {
+				if (!this.squareAt(endAddress).isOccupied())
+					return true;
+			} else {
+				
+				int changeInFile;
+				int changeInRank;
+				
+				int currentRank = startAddress.rank;
+				int currentFile = startAddress.file;
+				
+				if (endAddress.file > startAddress.file) {
+					changeInFile = 1;
+				} else {
+					changeInFile = -1;
+				}
+				
+				if (endAddress.rank > startAddress.rank) {
+					changeInRank = 1;
+				} else {
+					changeInRank = -1;
+				}
+				
+				currentRank += changeInRank;
+				currentFile += changeInFile;
+				
+				while (currentFile != endAddress.file && currentRank != endAddress.rank) {
+					
+					if (ChessNamingConstants.DEVELOPMENT) {
+						System.out.println("\t\t\tChecking " + currentRank + " " + currentFile);
+					}
+					
+					if (this.board[currentRank][currentFile].isOccupied()) {
+						if (ChessNamingConstants.DEVELOPMENT) {
+							System.out.println("\t\t\tOccupied!" + currentRank + " " + currentFile);
+						}
+						return true;
+					}
+					
+					currentFile += changeInFile;
+					currentRank += changeInRank;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns a printed and formatted board.
+	 */
 	public String toString() {
 		String str = "";
 
@@ -56,5 +248,19 @@ public class ChessBoard {
 		str += " a  b  c  d  e  f  g  h\n";
 
 		return str;
+	}
+
+	/**
+	 * This is dependant on you keeping the boolean up to date. So only use my
+	 * move method. I'm watching you.
+	 * 
+	 * @return Whether or not it is the black peices/player's turn
+	 */
+	public boolean getIsBlackTurn() {
+		return isBlackTurn;
+	}
+
+	private ChessBoardSquare squareAt(ChessCoordinatePair ccp) {
+		return board[ccp.rank][ccp.file];
 	}
 }

@@ -13,7 +13,7 @@ public class ChessBoardSquare {
 	}
 
 	public boolean isOccupied() {
-		return this.piece == null;
+		return this.piece != null;
 	}
 
 	public String toString() {
