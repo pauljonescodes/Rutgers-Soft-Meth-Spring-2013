@@ -1,6 +1,15 @@
 package test;
 
+import java.util.ArrayList;
+
 import util.*;
+import model.pieces.*;
+
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
 
 public class ChessTestDriver {
 	
@@ -8,13 +17,29 @@ public class ChessTestDriver {
 		ChessCoordinatePair ccpone = new ChessCoordinatePair(0, 0);
 		ChessCoordinatePair ccptwo = new ChessCoordinatePair(0, 7);
 		
-		ccpone.file = 5;
-		ccpone.rank = 3;
+		ccpone.file = 1;
+		ccpone.rank = 1;
 		
 		ccptwo.file = 3;
 		ccptwo.rank = 5;
 		
 		System.out.println(ccpone.isDiagonalTo(ccptwo));
+		
+		RookChessPiece rcp = new RookChessPiece(false);
+		ArrayList<ChessCoordinatePair> deepestMoves = rcp.deepestMovesFrom(ccpone);
+		
+		System.out.println("Deepest moves for Rook at " + ccpone);
+		for (int i = 0; i < deepestMoves.size(); i++) {
+			System.out.println(deepestMoves.get(i));
+		}
+		
+		KnightChessPiece kcp = new KnightChessPiece(false);
+		deepestMoves = kcp.deepestMovesFrom(ccpone);
+		
+		System.out.println("Deepest moves for Knight at " + ccpone);
+		for (int i = 0; i < deepestMoves.size(); i++) {
+			System.out.println(deepestMoves.get(i));
+		}
 		
 		for (int fileone = 0; fileone < 8; fileone++) {
 			ccpone.file = fileone;

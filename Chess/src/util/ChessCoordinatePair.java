@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessCoordinatePair {
 	public int rank;
 	public int file;

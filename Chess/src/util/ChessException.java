@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessException extends Exception {
 	private static final long serialVersionUID = 95870756151442533L;
 

@@ -3,6 +3,12 @@ package model.board;
 import model.pieces.ChessPiece;
 import util.*;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessBoardSquare {
 	public final ChessCoordinatePair location;
 	public ChessPiece piece;

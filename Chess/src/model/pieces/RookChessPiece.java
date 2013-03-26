@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import util.ChessCoordinatePair;
 import util.ChessNamingConstants;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class RookChessPiece extends ChessPiece {
 
 	public RookChessPiece(boolean isBlack) {

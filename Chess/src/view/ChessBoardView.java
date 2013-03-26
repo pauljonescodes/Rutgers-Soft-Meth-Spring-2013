@@ -3,9 +3,16 @@ package view;
 import controller.ChessBoardViewController;
 import util.*;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessBoardView {
 
 	public ChessBoardViewController vc;
+	public boolean drawOffered;
 	
 	public ChessBoardView(ChessBoardViewController viewController) {
 		this.vc = viewController;
@@ -13,8 +20,15 @@ public class ChessBoardView {
 	
 	public void giveArgument(String arg) {
 		if (arg.compareTo("resign") == 0) {
+			System.out.println(this.vc.isBlackTurn() ? "White wins!" : "Black wins!");
 			this.vc.resign();
-		} else if (arg.length() == 5){
+		} if (arg.contains("draw?")) {
+			arg = arg.substring(0, arg.indexOf(" draw?"));
+			this.drawOffered = true;
+		} if (arg.compareTo("draw") == 0 && this.drawOffered) { 
+			System.out.println("Draw.");
+			System.exit(0);
+		} if (arg.length() == 5){
 			char rankOne = arg.charAt(0);
 			char fileOne = arg.charAt(1);
 			

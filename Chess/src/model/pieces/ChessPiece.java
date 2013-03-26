@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import util.*;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessPiece {
 	public boolean isBlack;
 

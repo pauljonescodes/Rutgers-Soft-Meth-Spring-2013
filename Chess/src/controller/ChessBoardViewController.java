@@ -3,6 +3,12 @@ package controller;
 import util.*;
 import model.board.ChessBoard;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessBoardViewController {
 	private ChessBoard board;
 	public boolean gameHasConcluded;

@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class ChessNamingConstants {
 	public static final String KING = "K";
 	public static final String QUEEN = "Q";

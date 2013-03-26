@@ -5,6 +5,12 @@ import java.util.Scanner;
 import view.ChessBoardView;
 import controller.ChessBoardViewController;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class Chess {
 	public static void main (String[]args) {
 		ChessBoardViewController vc = new ChessBoardViewController();

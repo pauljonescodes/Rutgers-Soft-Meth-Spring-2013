@@ -1,7 +1,15 @@
 package model.pieces;
 
+import java.util.ArrayList;
+
 import util.ChessCoordinatePair;
 import util.ChessNamingConstants;
+
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
 
 public class BishopChessPiece extends ChessPiece {
 
@@ -46,5 +54,9 @@ public class BishopChessPiece extends ChessPiece {
 		}
 
 		return false;
+	}
+	
+	public ArrayList<ChessCoordinatePair> deepestMovesFrom() {
+		return null;
 	}
 }

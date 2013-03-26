@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
+
 public class InvalidCoordinateException extends ChessException {
 
 	/**

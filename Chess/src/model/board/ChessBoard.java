@@ -1,7 +1,15 @@
 package model.board;
 
+import java.util.ArrayList;
+
 import util.*;
 import model.pieces.*;
+
+/**
+ * 
+ * @author Paul Jones
+ *
+ */
 
 public class ChessBoard {
 	public static final int NUMBER_OF_RANKS = 8;
@@ -79,8 +87,7 @@ public class ChessBoard {
 
 		special.isCapturing = takenPiece == null ? false : true;
 		special.isPromoting = ChessPieceConstant == null ? false : true;
-		special.pieceInPath = this.boardHasPieceInPathBetween(startAddress,
-				endAddress);
+		special.pieceInPath = this.boardHasPieceInPathBetween(startAddress, endAddress);
 
 		if (startAddress.equals(endAddress)) {
 			throw new InvalidMoveException(
@@ -121,10 +128,8 @@ public class ChessBoard {
 			return new KnightChessPiece(!this.isBlackTurn);
 		} else if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.BISHOP)) {
 			return new BishopChessPiece(!this.isBlackTurn);
-		} else if (CHESS_PIECE_CONSTANT.equals(ChessNamingConstants.QUEEN)) {
-			return new QueenChessPiece(!this.isBlackTurn);
 		} else {
-			return null;
+			return new QueenChessPiece(!this.isBlackTurn);
 		}
 	}
 
@@ -166,65 +171,179 @@ public class ChessBoard {
 		}
 
 		if (startAddress.hasSameFileAs(endAddress)) {
+			
+			if (startAddress.rank < endAddress.rank) {
 			for (int i = startAddress.rank + 1; i < endAddress.rank; i++) {
 				if (board[i][startAddress.file].isOccupied()) {
 					return true;
 				}
 			}
+			} else {
+				for (int i = startAddress.rank - 1; i > endAddress.rank; i--) {
+					if (board[i][startAddress.file].isOccupied()) {
+						return true;
+					}
+				}
+			}
+			
 		} else if (startAddress.hasSameRankAs(endAddress)) {
+			if (startAddress.file < endAddress.file) {
 			for (int i = startAddress.file + 1; i < endAddress.file; i++) {
 				if (board[startAddress.rank][i].isOccupied()) {
 					return true;
 				}
+			} 
+			} else {
+				for (int i = startAddress.file - 1; i > endAddress.file; i--) {
+					if (board[startAddress.rank][i].isOccupied()) {
+						return true;
+					}
+				} 
 			}
 		} else if (startAddress.isDiagonalTo(endAddress)) {
 
 			if (ChessNamingConstants.DEVELOPMENT) {
-				System.out.printf("\n\t\t\t%s isDiagonalTo %s\n", startAddress.toString(), endAddress.toString());
+				System.out.printf("\n\t\t\t%s isDiagonalTo %s\n",
+						startAddress.toString(), endAddress.toString());
 			}
-			
+
 			if (startAddress.isAdjacentTo(endAddress)) {
 				if (!this.squareAt(endAddress).isOccupied())
 					return true;
 			} else {
-				
+
 				int changeInFile;
 				int changeInRank;
-				
+
 				int currentRank = startAddress.rank;
 				int currentFile = startAddress.file;
-				
+
 				if (endAddress.file > startAddress.file) {
 					changeInFile = 1;
 				} else {
 					changeInFile = -1;
 				}
-				
+
 				if (endAddress.rank > startAddress.rank) {
 					changeInRank = 1;
 				} else {
 					changeInRank = -1;
 				}
-				
+
 				currentRank += changeInRank;
 				currentFile += changeInFile;
-				
-				while (currentFile != endAddress.file && currentRank != endAddress.rank) {
-					
+
+				while (currentFile != endAddress.file
+						&& currentRank != endAddress.rank) {
+
 					if (ChessNamingConstants.DEVELOPMENT) {
-						System.out.println("\t\t\tChecking " + currentRank + " " + currentFile);
+						System.out.println("\t\t\tChecking " + currentRank
+								+ " " + currentFile);
 					}
-					
+
 					if (this.board[currentRank][currentFile].isOccupied()) {
 						if (ChessNamingConstants.DEVELOPMENT) {
-							System.out.println("\t\t\tOccupied!" + currentRank + " " + currentFile);
+							System.out.println("\t\t\tOccupied!" + currentRank
+									+ " " + currentFile);
 						}
 						return true;
 					}
-					
+
 					currentFile += changeInFile;
 					currentRank += changeInRank;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	private boolean kingIsInCheck() {
+		for (int currentRank = 0; currentRank < this.board.length; currentRank++) {
+			for (int currentFile = 0; currentFile < this.board[currentRank].length; currentFile++) {
+				if (this.board[currentRank][currentFile].isOccupied()
+						&& this.board[currentRank][currentFile].piece.isBlack == this.isBlackTurn) {
+					return isPieceCollidingWithKingAt(currentRank, currentFile);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isPieceCollidingWithKingAt(int rank, int file) {
+		ChessPiece cp = this.board[rank][file].piece;
+		ChessCoordinatePair startAddress = new ChessCoordinatePair(rank, file);
+		ArrayList<ChessCoordinatePair> deepestMoves = cp
+				.deepestMovesFrom(startAddress);
+
+		for (int i = 0; i < deepestMoves.size(); i++) {
+			if (this.kingIsFirstCollisionInPathBetween(startAddress,
+					deepestMoves.get(i))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean kingIsFirstCollisionInPathBetween(
+			ChessCoordinatePair startAddress, ChessCoordinatePair endAddress) {
+
+		if (startAddress.hasSameFileAs(endAddress)) {
+			for (int i = startAddress.rank + 1; i < endAddress.rank; i++) {
+				if (board[i][startAddress.file].isOccupied()) {
+					return board[i][startAddress.file].piece instanceof KingChessPiece;
+				}
+			}
+		} else if (startAddress.hasSameRankAs(endAddress)) {
+			for (int i = startAddress.file + 1; i < endAddress.file; i++) {
+				if (board[startAddress.rank][i].isOccupied()) {
+					return board[startAddress.rank][i].piece instanceof KingChessPiece;
+				}
+			}
+		} else if (startAddress.isDiagonalTo(endAddress)) {
+
+			int changeInFile;
+			int changeInRank;
+
+			int currentRank = startAddress.rank;
+			int currentFile = startAddress.file;
+
+			if (endAddress.file > startAddress.file) {
+				changeInFile = 1;
+			} else {
+				changeInFile = -1;
+			}
+
+			if (endAddress.rank > startAddress.rank) {
+				changeInRank = 1;
+			} else {
+				changeInRank = -1;
+			}
+
+			currentRank += changeInRank;
+			currentFile += changeInFile;
+
+			while (currentFile != endAddress.file
+					&& currentRank != endAddress.rank) {
+
+				if (ChessNamingConstants.DEVELOPMENT) {
+					System.out.println("\t\t\tChecking " + currentRank + " "
+							+ currentFile);
+				}
+
+				if (this.board[currentRank][currentFile].isOccupied()) {
+					if (ChessNamingConstants.DEVELOPMENT) {
+						System.out.println("\t\t\tOccupied!" + currentRank
+								+ " " + currentFile);
+					}
+					return this.board[currentRank][currentFile].piece instanceof KingChessPiece;
+				}
+
+				currentFile += changeInFile;
+				currentRank += changeInRank;
+
 			}
 		}
 
@@ -263,4 +382,5 @@ public class ChessBoard {
 	private ChessBoardSquare squareAt(ChessCoordinatePair ccp) {
 		return board[ccp.rank][ccp.file];
 	}
+
 }
