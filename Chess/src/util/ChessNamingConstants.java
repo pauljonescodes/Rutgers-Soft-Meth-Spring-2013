@@ -20,5 +20,5 @@ public class ChessNamingConstants {
 	public static final String BLACK_SQUARE = "##";
 	public static final String WHITE_SQUARE = "  ";
 	
-	public static final boolean DEVELOPMENT = true;
+	public static final boolean DEVELOPMENT = false;
 }

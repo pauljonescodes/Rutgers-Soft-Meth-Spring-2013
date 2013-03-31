@@ -376,7 +376,7 @@ public class ChessBoard {
 	 * @return Whether or not it is the black peices/player's turn
 	 */
 	public boolean getIsBlackTurn() {
-		return isBlackTurn;
+		return !isBlackTurn;
 	}
 
 	private ChessBoardSquare squareAt(ChessCoordinatePair ccp) {
