@@ -76,6 +76,12 @@ public class Album {
 		throw new PhotoAlbumException("This photo does not exist.");
 	}
 
+	protected boolean hasPhoto(String photoName) {
+		if (this.getPhotoIndex(photoName) >= 0) {
+			return true;
+		} else return false;
+	}
+	
 	protected String getAlbumName() {
 		return albumName;
 	}

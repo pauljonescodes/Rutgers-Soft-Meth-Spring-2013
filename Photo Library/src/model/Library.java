@@ -73,4 +73,14 @@ public class Library {
 	public int getNumberOfAlbums() {
 		return this.albums.size();
 	}
+	
+	public boolean hasPhoto(String photoName) {
+		for (Album album : this.albums) {
+			if (album.hasPhoto(photoName)) {
+				return true;
+			}
+		} 
+		
+		return false;
+	}
 }

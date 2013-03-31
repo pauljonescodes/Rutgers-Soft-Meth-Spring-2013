@@ -99,7 +99,11 @@ public class PhotoAlbumModel {
 	 */
 	public void addPhoto(String fileName, String caption, String albumName)
 			throws PhotoAlbumException {
-		this.albums.getAlbum(albumName).addPhoto(fileName, caption);
+		if (this.albums.hasPhoto(fileName)) {
+			throw new PhotoAlbumException("A photo with that filename already exists.");
+		} else {
+			this.albums.getAlbum(albumName).addPhoto(fileName, caption);
+		}
 	}
 
 	/**
@@ -129,15 +133,35 @@ public class PhotoAlbumModel {
 		this.albums.getAlbum(albumName).removePhoto(fileName);
 	}
 
-	public void addTag(String fileName, String tagType, String tagValue) {
-
+	private Photo getPhoto(String fileName) throws PhotoAlbumException {
+		ArrayList<String> albumNames = this.getAlbumNames();
+		
+		for (String albumName : albumNames) {
+			if (this.getAlbumWithName(albumName).hasPhoto(fileName)) {
+				return this.getAlbumWithName(albumName).getPhoto(fileName);
+			}
+		} 
+		
+		throw new PhotoAlbumException("That photo does not exist.");
+	}
+	
+	public void addTag(String fileName, String tagType, String tagValue) throws PhotoAlbumException {
+		this.getPhoto(fileName).addTag(tagType, tagValue);
 	}
 
 	public void deleteTag(String fileName, String tagType, String tagValue) {
 
 	}
 
-	public void listPhotoInfo(String fileName) {
-
+	public String getPhotoInfo(String fileName) throws PhotoAlbumException {
+		return this.getPhoto(fileName).toString();
+	}
+	
+	public void getPhotosByDate() {
+		
+	}
+	
+	public void getPhotosByTag() {
+		
 	}
 }
