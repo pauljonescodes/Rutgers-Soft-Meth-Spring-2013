@@ -113,8 +113,6 @@ public class PhotoAlbumModel {
 	public void movePhoto(String fileName, String oldAlbumName, String newAlbumName) throws PhotoAlbumException {
 		Photo temp = this.getAlbumWithName(oldAlbumName).getPhoto(fileName);
 		
-		System.out.println(temp.photoName);
-		
 		this.getAlbumWithName(oldAlbumName).removePhoto(fileName);
 		this.getAlbumWithName(newAlbumName).addPhoto(temp);
 	}

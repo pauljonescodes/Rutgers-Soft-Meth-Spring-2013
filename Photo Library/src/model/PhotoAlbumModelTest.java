@@ -157,4 +157,33 @@ public class PhotoAlbumModelTest {
 					+ pae.getLocalizedMessage());
 		}
 	}
+	
+	@Test
+	public void testMoveNonExistantPhoto() {
+		try {
+			this.library.createAlbum("Fall colors");
+			this.library.createAlbum("Colorado Springs");
+
+			assertTrue(this.library.getNumberOfAlbums() == 2);
+
+			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
+			this.library.addPhoto("DSC_005.jpg", "DSC_005", "Fall colors");
+			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
+
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+			
+			this.library.movePhoto("DSC_002.jpg", "Fall colors", "Colorado Springs");
+			this.library.movePhoto("DSC_003.jpg", "Fall colors", "Colorado Springs");
+			
+			fail("Should not have not thrown an exception.");
+			
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") != 3);
+
+			fail("Should not have not thrown an exception.");
+			
+		} catch (PhotoAlbumException pae) {
+			
+		}
+	}
 }
