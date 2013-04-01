@@ -68,11 +68,11 @@ public class InteractiveModeViewController {
 	 * 
 	 * @param albumName
 	 *            The name of the album that the user will be queried to create.
-	 * @throws PhotoAlbumException 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#createAlbum(java.lang.String)
 	 * 
-	 * <!-- DONE -->
+	 *      <!-- DONE -->
 	 */
 	public void createAlbum(String albumName) throws PhotoAlbumException {
 		try {
@@ -88,7 +88,7 @@ public class InteractiveModeViewController {
 	 * 
 	 * @param albumName
 	 *            The name of the album the user will be queried to delete.
-	 * @throws PhotoAlbumException 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#deleteAlbum(java.lang.String)
 	 */
@@ -97,8 +97,9 @@ public class InteractiveModeViewController {
 			this.user.deleteAlbum(albumName);
 		} catch (PhotoAlbumException e) {
 			throw e;
-		} 
+		}
 	}
+
 	/**
 	 * 
 	 * Queries the user for a list of albums, which are returned as Album
@@ -120,11 +121,12 @@ public class InteractiveModeViewController {
 	 * @return List of photo names delimited by new line.
 	 * 
 	 *         Photos for album [name]: [fileName] - [date] ...
-	 * @throws PhotoAlbumException 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#listPhotos(java.lang.String)
 	 */
-	public ArrayList<String> listPhotos(String albumName) throws PhotoAlbumException {
+	public ArrayList<String> listPhotos(String albumName)
+			throws PhotoAlbumException {
 		try {
 			return this.user.getPhotoNamesForAlbum(albumName);
 		} catch (PhotoAlbumException e) {
@@ -137,14 +139,16 @@ public class InteractiveModeViewController {
 	 * interface this class implements.
 	 * 
 	 * Returns a boolean to the view, which it uses to decide what to print.
-	 * @throws PhotoAlbumException 
+	 * 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#addPhoto(java.lang.String,
 	 *      java.lang.String, java.lang.String)
-	 *      
+	 * 
 	 *      <!-- DONE -->
 	 */
-	public void addPhoto(String fileName, String caption, String albumName) throws PhotoAlbumException {
+	public void addPhoto(String fileName, String caption, String albumName)
+			throws PhotoAlbumException {
 		try {
 			this.user.addPhoto(fileName, caption, albumName);
 		} catch (PhotoAlbumException e) {
@@ -155,7 +159,8 @@ public class InteractiveModeViewController {
 	/**
 	 * Queries the user for move a photo, and passes the boolean garnered from
 	 * this query to the view.
-	 * @throws PhotoAlbumException 
+	 * 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#movePhoto(java.lang
 	 *      .String, java.lang.String, java.lang.String)
@@ -172,12 +177,14 @@ public class InteractiveModeViewController {
 	/**
 	 * Queries the user for move a photo, and passes the boolean garnered from
 	 * this query to the view.
-	 * @throws PhotoAlbumException 
+	 * 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#removePhoto(java.lang
 	 *      .String, java.lang.String)
 	 */
-	public void removePhoto(String fileName, String albumName) throws PhotoAlbumException {
+	public void removePhoto(String fileName, String albumName)
+			throws PhotoAlbumException {
 		try {
 			this.user.removePhoto(fileName, albumName);
 		} catch (PhotoAlbumException e) {
@@ -191,14 +198,16 @@ public class InteractiveModeViewController {
 	 * Expects a boolean back regarding the success or failure of the operation.
 	 * 
 	 * Sends the view a String to print based on this success or failure.
-	 * @throws PhotoAlbumException 
+	 * 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#addTag(java.lang.String
 	 *      , java.lang.String, java.lang.String)
 	 */
-	public void addTag(String fileName, String tagType, String tagValue) throws PhotoAlbumException {
+	public void addTag(String fileName, String tagType, String tagValue)
+			throws PhotoAlbumException {
 		try {
-			this.user.addTag(tagType, tagValue, fileName);
+			this.user.addTag(fileName, tagType, tagValue);
 		} catch (PhotoAlbumException e) {
 			throw e;
 		}
@@ -208,14 +217,17 @@ public class InteractiveModeViewController {
 	 * Calls the model to delete a tag.
 	 * 
 	 * Based on the boolean returned, sends the view a formatted String.
-	 * @throws PhotoAlbumException 
+	 * 
+	 * @throws PhotoAlbumException
 	 * 
 	 * @see cs213.photoAlbum.control.PhotoAlbumViewController#deleteTag(java.lang
 	 *      .String, java.lang.String, java.lang.String)
 	 */
-	public void deleteTag(String fileName, String tagType, String tagValue) throws PhotoAlbumException {
+	public void deleteTag(String fileName, String tagType, String tagValue)
+			throws PhotoAlbumException {
 		try {
-		this.deleteTag(fileName, tagType, tagValue);
+			System.out.println(fileName + " " + tagType + " " + tagValue);
+			this.user.deleteTag(fileName, tagType, tagValue);
 		} catch (PhotoAlbumException pae) {
 			throw pae;
 		}
@@ -236,14 +248,7 @@ public class InteractiveModeViewController {
 	 *      lang.String)
 	 */
 	public String listPhotoInfo(String fileName) {
-		try {
-			return this.user.getPhoto(fileName).toString();
-		} catch (PhotoAlbumException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
+		return this.user.getPhotoInfo(fileName);
 	}
 
 	/**
@@ -266,7 +271,7 @@ public class InteractiveModeViewController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -289,7 +294,7 @@ public class InteractiveModeViewController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -303,7 +308,7 @@ public class InteractiveModeViewController {
 	public void logout() {
 		this.isLoggedIn = false;
 	}
-	
+
 	public String getUserId() {
 		return this.userId;
 	}

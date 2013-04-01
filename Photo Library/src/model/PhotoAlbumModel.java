@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class PhotoAlbumModel implements Serializable {
 	
@@ -184,8 +185,8 @@ public class PhotoAlbumModel implements Serializable {
 			try {
 			str = "Photo file info: " + fileName + "\n";
 			str+= "Album: " + this.getAlbumFromPhoto(fileName) + "\n";
-			str+= "Date: " + this.getPhoto(fileName).dateCreated.toString() + "\n";
-			str+= "Tags: " + this.getPhoto(fileName).tags;
+			str+= "Date: " + this.getPhoto(fileName).dateCreated.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + "\n";
+			str+= "Tags: " + this.getPhoto(fileName).getPrintableTags();
 			} catch (Exception e) {
 				str = "Photo <" + fileName + "> does not exist";
 			}

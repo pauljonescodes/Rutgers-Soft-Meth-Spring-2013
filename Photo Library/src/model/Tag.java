@@ -28,4 +28,8 @@ public class Tag implements Serializable {
 			}
 		}
 	}
+	
+	public String toString() {
+		return this.tagType + ":\"" + tagValue + "\"";
+	}
 }

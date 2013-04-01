@@ -80,4 +80,13 @@ public class Photo implements Serializable {
 		return this.photoName;
 	}
 	
+	public String getPrintableTags() {
+		String tgs = "";
+		
+		for (int i = 0; i < this.tags.size(); i++) {
+			tgs += this.tags.get(i).toString() + "\n";
+		}
+		
+		return tgs;
+	}
 }

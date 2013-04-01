@@ -3,6 +3,7 @@ package simpleview;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import model.Photo;
 import model.PhotoAlbumException;
 
 import control.InteractiveModeViewController;
@@ -122,7 +123,7 @@ public class InteractiveView {
 						.println("Tried to list photos in album but formatting was incorrect"
 								+ e.getLocalizedMessage());
 			}
-		} else if (arg.contains("removePhoto \"")) {
+		} else if (arg.contains("removePhoto \"")) { /* works */
 			/*
 			 * Output: Removed photo: <fileName> - From album <albumName> Or:
 			 * Photo <fileName> is not in album <albumName>
@@ -144,7 +145,7 @@ public class InteractiveView {
 				System.out.println("Remove photo formatting wrong, try again");
 			}
 
-		} else if (arg.contains("movePhoto \"")) {
+		} else if (arg.contains("movePhoto \"")) { /* works */
 			/*
 			 * movePhoto "<fileName>" "<oldAlbumName>" "<newAlbumName>"
 			 * 
@@ -172,7 +173,7 @@ public class InteractiveView {
 				System.out
 						.println("You tried to move a photo but your formmating was incorrect, try again");
 			}
-		} else if (arg.contains("addTag \"")) {
+		} else if (arg.contains("addTag \"")) { /* works */
 			/*
 			 * addTag "<fileName>" <tagType>:"<tagValue>"
 			 * 
@@ -183,7 +184,7 @@ public class InteractiveView {
 			try {
 				int startIndexFileName = arg.indexOf('"');
 				int endIndexFileName = arg.indexOf('"', startIndexFileName + 1);
-				int startIndextagType = endIndexFileName + 2;
+				int startIndextagType = endIndexFileName + 1;
 				int endIndexOldAlbum = arg.indexOf(':', startIndextagType + 1);
 				int startIndexNewAlbum = arg.indexOf('"', endIndexOldAlbum + 1);
 				int endIndexNewAlbum = arg.indexOf('"', startIndexNewAlbum + 1);
@@ -200,11 +201,11 @@ public class InteractiveView {
 				System.out
 						.println("You tried to add a tag but formmated the input incorrectly");
 			}
-		} else if (arg.contains("deleteTag \"")) {
+		} else if (arg.contains("deleteTag \"")) { /* works */
 			try {
 				int startIndexFileName = arg.indexOf('"');
 				int endIndexFileName = arg.indexOf('"', startIndexFileName + 1);
-				int startIndextagType = endIndexFileName + 2;
+				int startIndextagType = endIndexFileName + 1;
 				int endIndexOldAlbum = arg.indexOf(':', startIndextagType + 1);
 				int startIndexNewAlbum = arg.indexOf('"', endIndexOldAlbum + 1);
 				int endIndexNewAlbum = arg.indexOf('"', startIndexNewAlbum + 1);
@@ -232,6 +233,23 @@ public class InteractiveView {
 			} catch (Exception e) {
 				System.out
 						.println("You tried to list phot info, but your formatting was incorrect");
+			}
+		} else if (arg.contains("getPhotosByTag \"")) {
+			try {
+				int startIndexFileName = arg.indexOf('"');
+				int endIndexFileName = arg.indexOf('"', startIndexFileName + 1);
+				int startIndexCaption = arg.indexOf('"', endIndexFileName + 1);
+				int endIndexCaption = arg.indexOf('"', startIndexCaption + 1);
+
+				String tagType = arg.substring(startIndexFileName + 1,
+						endIndexFileName);
+				String tagValue = arg.substring(startIndexCaption + 1,
+						endIndexCaption);
+
+				this.getPhotosByTag(tagType, tagValue);
+			} catch (Exception e) {
+				System.out
+						.println("Formatting on addPhoto incorrect, try again");
 			}
 		} else {
 			System.out.println("That command was not recognized.");
@@ -264,7 +282,8 @@ public class InteractiveView {
 					+ this.viewController.userId + ": ");
 			System.out.println(albumName);
 		} catch (PhotoAlbumException e) {
-			System.out.println("album exists for user " + this.viewController.userId + ":");
+			System.out.println("album exists for user "
+					+ this.viewController.userId + ":");
 			System.out.println(albumName + "\t\t" + e.getLocalizedMessage());
 		}
 	}
@@ -290,7 +309,8 @@ public class InteractiveView {
 					+ this.viewController.userId);
 			System.out.println(albumName);
 		} catch (PhotoAlbumException e) {
-			System.out.println("album does not exist for user " + this.viewController.userId + ":");
+			System.out.println("album does not exist for user "
+					+ this.viewController.userId + ":");
 			System.out.println(albumName + "\t\t" + e.getLocalizedMessage());
 		}
 	}
@@ -403,7 +423,8 @@ public class InteractiveView {
 					+ "> - From album <" + oldAlbumName + "> to album <"
 					+ newAlbumName + ">");
 		} catch (PhotoAlbumException pae) {
-			System.out.println("Photo <" + fileName + "> does not exist in <" + oldAlbumName + "> - " + pae.getLocalizedMessage());
+			System.out.println("Photo <" + fileName + "> does not exist in <"
+					+ oldAlbumName + "> - " + pae.getLocalizedMessage());
 		}
 	}
 
@@ -418,9 +439,11 @@ public class InteractiveView {
 	private void removePhoto(String fileName, String albumName) {
 		try {
 			this.viewController.removePhoto(fileName, albumName);
-			System.out.println("<" + fileName + "> - From album <" + albumName + ">");
+			System.out.println("<" + fileName + "> - From album <" + albumName
+					+ ">");
 		} catch (PhotoAlbumException e) {
-			System.out.println("Photo <" + fileName + "> is not in album <" + albumName + ">" + e.getLocalizedMessage());
+			System.out.println("Photo <" + fileName + "> is not in album <"
+					+ albumName + ">" + e.getLocalizedMessage());
 		}
 	}
 
@@ -438,9 +461,11 @@ public class InteractiveView {
 		try {
 			this.viewController.addTag(fileName, tagType, tagValue);
 			System.out.println("Added tag:");
-			System.out.println("Tag already exists for<" + fileName + "> <" + tagType + ">:<" + tagValue + ">");
+			System.out.println("<" + fileName + "> <"
+					+ tagType + ">:<" + tagValue + ">");
 		} catch (PhotoAlbumException e) {
-			System.out.println("<" + fileName + "> <" + tagType + ">:<" + tagValue + ">");
+			System.out.println("<" + fileName + "> <" + tagType + ">:<"
+					+ tagValue + ">");
 			System.out.println(e.getLocalizedMessage());
 		}
 	}
@@ -459,11 +484,13 @@ public class InteractiveView {
 	 */
 	private void deleteTag(String fileName, String tagType, String tagValue) {
 		try {
-			this.viewController.addTag(fileName, tagType, tagValue);
+			this.viewController.deleteTag(fileName, tagType, tagValue);
 			System.out.println("Deleted tag:");
-			System.out.println("<" + fileName + "> <" + tagType + ">:<" + tagValue + ">");
+			System.out.println("<" + fileName + "> <" + tagType + ">:<"
+					+ tagValue + ">");
 		} catch (PhotoAlbumException e) {
-			System.out.println("Tag does not exist for<" + fileName + "> <" + tagType + ">:<" + tagValue + ">");
+			System.out.println("Tag does not exist for<" + fileName + "> <"
+					+ tagType + ">:<" + tagValue + ">");
 			System.out.println(e.getLocalizedMessage());
 		}
 	}
@@ -495,6 +522,7 @@ public class InteractiveView {
 	 * 
 	 */
 	private void getPhotosByDate(Calendar startDate, Calendar endDate) {
+		//return this.viewController.getPhotosByDate(startDate, endDate);
 	}
 
 	/**
@@ -506,7 +534,22 @@ public class InteractiveView {
 	 *            The actual content of this tag.
 	 */
 	private void getPhotosByTag(String tagType, String tagValue) {
-		this.viewController.getPhotosByTag(tagType, tagValue);
+		ArrayList<Photo> photos;
+
+		photos = this.viewController.getPhotosByTag(tagType, tagValue);
+
+		System.out.println("Photos for user <" + this.viewController.userId
+				+ "> with tags <" + tagType + "><" + tagValue + ">:");
+
+		if (photos != null && photos.size() > 0) {
+			for (Photo s : photos) {
+				System.out.println("\t" + s.toString());
+			}
+		} else {
+			System.out.println("No albums exists for user "
+					+ this.viewController.getUserId());
+		}
+
 	}
 
 	/**
