@@ -74,6 +74,38 @@ public class Library {
 		return this.albums.size();
 	}
 	
+	protected ArrayList<Photo> getPhotosByTag(String tagType, String tagValue) throws PhotoAlbumException {
+		ArrayList<Photo> photosWithTag = new ArrayList<Photo>();
+		ArrayList<String> albumNames = this.getAlbumNames();
+		
+		for (String albumName : albumNames) {
+			ArrayList<String> photoNames = this.getAlbum(albumName).getPhotoNames();
+			
+			for (String photoName : photoNames) {
+				if (this.getPhoto(photoName).hasTag(tagType, tagValue)) {
+					photosWithTag.add(this.getPhoto(photoName));
+				}
+			}
+		} 
+		
+		if (photosWithTag.size() == 0)
+			throw new PhotoAlbumException("That tag does not exist.");
+		
+		return photosWithTag;
+	}
+	
+	protected Photo getPhoto(String photoName) throws PhotoAlbumException{
+		ArrayList<String> albumNames = this.getAlbumNames();
+		
+		for (String albumName : albumNames) {
+			if (this.getAlbum(albumName).hasPhoto(photoName)) {
+				return this.getAlbum(albumName).getPhoto(photoName);
+			}
+		} 
+		
+		throw new PhotoAlbumException("That photo does not exist.");
+	}
+	
 	public boolean hasPhoto(String photoName) {
 		for (Album album : this.albums) {
 			if (album.hasPhoto(photoName)) {

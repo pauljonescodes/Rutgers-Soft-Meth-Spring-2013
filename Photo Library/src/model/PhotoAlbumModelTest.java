@@ -203,7 +203,94 @@ public class PhotoAlbumModelTest {
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
 			
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
+			this.library.addTag("DSC_007.jpg", "person", "David Boyle");
+			
+		} catch (PhotoAlbumException pae) {
+			fail("Add tag failed with message: "
+					+ pae.getLocalizedMessage());
+		}
+	}
+	
+	@Test
+	public void testAddTagToNonExistantPhoto() {
+		try {
+			this.library.createAlbum("Fall colors");
+			assertTrue(this.library.getNumberOfAlbums() == 1);
+			
+			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
 
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
+			
+			this.library.addTag("DSC_002.jpg", "person", "Paul Jones");
+			
+			fail("The last call should have thrown an exception because the photo does not exist.");
+			
+		} catch (PhotoAlbumException pae) {
+			
+		}
+	}
+	
+	@Test
+	public void testRemoveTag() {
+		try {
+			this.library.createAlbum("Fall colors");
+			assertTrue(this.library.getNumberOfAlbums() == 1);
+			
+			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
+
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
+			
+			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
+			this.library.deleteTag("DSC_001.jpg", "person", "Paul Jones");
+			
+		} catch (PhotoAlbumException pae) {
+			fail("Remove tag failed with message: " + pae.getLocalizedMessage());
+		}
+	}
+	
+	@Test
+	public void testAddDoubleTag() {
+		try {
+			this.library.createAlbum("Fall colors");
+			assertTrue(this.library.getNumberOfAlbums() == 1);
+			
+			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
+
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
+			
+			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
+			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
+			
+			fail("Add double tag failed with message:");
+			
+		} catch (PhotoAlbumException pae) {
+			
+		}
+	}
+	
+	@Test
+	public void testGetTag() {
+		try {
+			this.library.createAlbum("Fall colors");
+			this.library.createAlbum("Colorado Springs");
+
+			assertTrue(this.library.getNumberOfAlbums() == 2);
+
+			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
+			this.library.addPhoto("DSC_005.jpg", "DSC_005", "Fall colors");
+			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
+
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
+			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+			
+			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
+			this.library.addTag("DSC_007.jpg", "person", "Paul Jones");
+			this.library.addTag("DSC_005.jpg", "person", "Paul Jones");
+			
+			ArrayList<Photo> photosWithPaul = this.library.getPhotosByTag("person", "Paul Jones");
+			
+			assertTrue(photosWithPaul.size() == 3);
+			
 		} catch (PhotoAlbumException pae) {
 			fail("Add tag failed with message: "
 					+ pae.getLocalizedMessage());

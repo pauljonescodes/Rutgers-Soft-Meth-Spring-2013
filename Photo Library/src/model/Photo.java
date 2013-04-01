@@ -15,16 +15,46 @@ public class Photo {
 		this.caption = caption;
 		
 		this.tags = new ArrayList<Tag>();
-		
-		//this.dateCreated.set(Calendar.MILLISECOND,0);
+		this.dateCreated = Calendar.getInstance();
+		this.dateCreated.set(Calendar.MILLISECOND,0);
 	}
 	
-	public void addTag(String tagType, String tagValue) {
-		this.tags.add(new Tag(tagType, tagValue));
+	public void addTag(String tagType, String tagValue) throws PhotoAlbumException {
+		if (this.hasTag(tagType, tagValue)) {
+			throw new PhotoAlbumException("This tag already exists for this photo.");
+		} else {
+			this.tags.add(new Tag(tagType, tagValue));
+		}
 	}
 	
-	public void deleteTag() {
-		
+	public void deleteTag(String tagType, String tagValue) throws PhotoAlbumException {
+		if (!this.hasTag(tagType, tagValue)) {
+			throw new PhotoAlbumException("This tag already exists for this photo.");
+		} else {
+			this.tags.remove(this.getTagIndex(tagType, tagValue));
+		}
+	}
+	
+	private int getTagIndex(String tagType, String tagValue) {
+		for (int i = 0; i < this.getNumberOfTags(); i++) {
+			if (tags.get(i) != null && tags.get(i).equals(new Tag(tagType, tagValue))) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+	
+	public boolean hasTag(String tagType, String tagValue) {
+		for (Tag tag : tags) {
+			if (tag.equals(new Tag(tagType, tagValue))) {
+				return true;
+			}
+		} return false;
+	}
+	
+	public int getNumberOfTags() {
+		return this.tags.size();
 	}
 	
 	public String getPhotoName() {
@@ -43,4 +73,18 @@ public class Photo {
 		this.caption = caption;
 	}
 
+	
+	/*     
+	 * Photo file name: <fileName>
+	 *     Album: <albumName>[,<albumName>]...
+	 *     Date: <date>
+	 *     Caption: <caption>
+	 *     Tags:<tagType>:<tagValue>
+	 */
+	public String toString() {
+		String str = "Photo file name: " + this.photoName;
+		
+		return str;
+	}
+	
 }
