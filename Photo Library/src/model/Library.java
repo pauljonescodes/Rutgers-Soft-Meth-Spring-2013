@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Library {
 
@@ -92,6 +93,26 @@ public class Library {
 			throw new PhotoAlbumException("That tag does not exist.");
 		
 		return photosWithTag;
+	}
+	
+	protected ArrayList<Photo> getPhotosInRange(Calendar first, Calendar second) throws PhotoAlbumException {
+		ArrayList<Photo> photosWithDate = new ArrayList<Photo>();
+		ArrayList<String> albumNames = this.getAlbumNames();
+		
+		for (String albumName : albumNames) {
+			ArrayList<String> photoNames = this.getAlbum(albumName).getPhotoNames();
+			
+			for (String photoName : photoNames) {
+				if (this.getPhoto(photoName).dateCreated.after(first) && this.getPhoto(photoName).dateCreated.before(second)) {
+					photosWithDate.add(this.getPhoto(photoName));
+				}
+			}
+		} 
+		
+		if (photosWithDate.size() == 0)
+			throw new PhotoAlbumException("That date does not exist.");
+		
+		return photosWithDate;
 	}
 	
 	protected Photo getPhoto(String photoName) throws PhotoAlbumException{

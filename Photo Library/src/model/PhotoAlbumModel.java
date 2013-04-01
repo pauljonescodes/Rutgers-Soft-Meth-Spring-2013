@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class PhotoAlbumModel {
 	private Library albums;
@@ -196,10 +197,26 @@ public class PhotoAlbumModel {
 		return this.getPhoto(fileName).toString();
 	}
 
-	public void getPhotosByDate() {
-		
+	/**
+	 * To retrieve photos between two dates.
+	 * 
+	 * @param first the date which you want every photo "after"
+	 * @param second the date which you want every photo "before"
+	 * @return
+	 * @throws PhotoAlbumException if there are no photos in that ranged
+	 */
+	public ArrayList<Photo> getPhotosInRange(Calendar first, Calendar second) throws PhotoAlbumException {
+		return this.albums.getPhotosInRange(first, second);
 	}
 	
+	/**
+	 * Returns an array list with every photo with a given tag.
+	 * 
+	 * @param tagType
+	 * @param tagValue
+	 * @return
+	 * @throws PhotoAlbumException if the tag does not exist
+	 */
 	public ArrayList<Photo> getPhotosByTag(String tagType, String tagValue) throws PhotoAlbumException {
 		return this.albums.getPhotosByTag(tagType, tagValue);
 	}
