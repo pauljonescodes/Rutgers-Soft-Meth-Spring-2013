@@ -2,6 +2,8 @@ package model;
 
 public class PhotoAlbumException extends Exception {
 
+	private static final long serialVersionUID = -4234080959965781122L;
+
 	public PhotoAlbumException() {
 		// TODO Auto-generated constructor stub
 	}

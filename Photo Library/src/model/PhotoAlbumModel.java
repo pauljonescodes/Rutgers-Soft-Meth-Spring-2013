@@ -1,13 +1,21 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class PhotoAlbumModel {
+public class PhotoAlbumModel implements Serializable {
+	
+	private static final long serialVersionUID = -415407991623113747L;
+	
 	private Library albums;
+	public final String userId;
+	public final String userName;
 
-	public PhotoAlbumModel() {
+	public PhotoAlbumModel(String userId, String userName) {
 		this.albums = new Library();
+		this.userId = userId;
+		this.userName = userName;
 	}
 
 	/*
@@ -25,6 +33,14 @@ public class PhotoAlbumModel {
 		this.albums.createAlbum(albumName);
 	}
 
+	public String getUserName() {
+		return this.userId;
+	}
+	
+	public String getFullName() {
+		return this.userName;
+	}
+	
 	/**
 	 * Deletes an old album.
 	 * 
@@ -155,7 +171,46 @@ public class PhotoAlbumModel {
 	public Photo getPhoto(String fileName) throws PhotoAlbumException {
 		return this.albums.getPhoto(fileName);
 	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 * @throws PhotoAlbumException printable string for a photo filename
+	 */
+	public String getPhotoInfo(String fileName) {
+		String str;
+		if (this.albums.hasPhoto(fileName)) {
+			try {
+			str = "Photo file info: " + fileName + "\n";
+			str+= "Album: " + this.getAlbumFromPhoto(fileName) + "\n";
+			str+= "Date: " + this.getPhoto(fileName).dateCreated.toString() + "\n";
+			str+= "Tags: " + this.getPhoto(fileName).tags;
+			} catch (Exception e) {
+				str = "Photo <" + fileName + "> does not exist";
+			}
+			return str;
+		} else {
+			str = "Photo <" + fileName + "> does not exist";
+		}
+		
+		return str;
+	}
 
+	
+	protected String getAlbumFromPhoto(String fileName) throws PhotoAlbumException {
+		if (this.albums.hasPhoto(fileName)) {
+			ArrayList<String> albumNames = this.getAlbumNames();
+			for (int i = 0; i < this.getNumberOfAlbums(); i++) {
+				if (this.getAlbum(albumNames.get(i)).hasPhoto(fileName)) {
+					return this.getAlbum(albumNames.get(i)).albumName;
+				}
+			}
+		} else throw new PhotoAlbumException("That photo does not exist.");
+		
+		return null;
+	}
+	
 	/*
 	 * Tag methods
 	 */
@@ -184,17 +239,6 @@ public class PhotoAlbumModel {
 	public void deleteTag(String fileName, String tagType, String tagValue)
 			throws PhotoAlbumException {
 		this.getPhoto(fileName).deleteTag(tagType, tagValue);
-	}
-
-	/**
-	 * Gets a single photo and returns its toString() value
-	 * 
-	 * @param fileName
-	 * @return
-	 * @throws PhotoAlbumException if the photo DNE
-	 */
-	public String getPhotoInfo(String fileName) throws PhotoAlbumException {
-		return this.getPhoto(fileName).toString();
 	}
 
 	/**

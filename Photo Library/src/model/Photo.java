@@ -1,9 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Photo {
+public class Photo implements Serializable {
+	
+	private static final long serialVersionUID = 969092331882216851L;
 	
 	protected String photoName;
 	protected String caption;
@@ -72,19 +75,9 @@ public class Photo {
 	public void setCaption(String caption) {
 		this.caption = caption;
 	}
-
 	
-	/*     
-	 * Photo file name: <fileName>
-	 *     Album: <albumName>[,<albumName>]...
-	 *     Date: <date>
-	 *     Caption: <caption>
-	 *     Tags:<tagType>:<tagValue>
-	 */
 	public String toString() {
-		String str = "Photo file name: " + this.photoName;
-		
-		return str;
+		return this.photoName;
 	}
 	
 }

@@ -1,7 +1,11 @@
 package model;
 
-public class Tag {
+import java.io.Serializable;
 
+public class Tag implements Serializable {
+
+	private static final long serialVersionUID = 3776136789605765315L;
+	
 	public String tagType;
 	public String tagValue;
 

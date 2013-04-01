@@ -12,7 +12,7 @@ public class PhotoAlbumModelTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.library = new PhotoAlbumModel();
+		this.library = new PhotoAlbumModel("", "");
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class PhotoAlbumModelTest {
 					+ pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testAddPhotoDuplicate() {
 		try {
@@ -90,13 +90,13 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_001.jpg", "DSC_005", "Fall colors");
 
 			fail("You should not be able to add a photo with a duplicate name, even if it's caption is different.");
-			
+
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
 			assertTrue(this.library
 					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
 
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
 
@@ -115,7 +115,7 @@ public class PhotoAlbumModelTest {
 					+ e.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRemovePhoto() {
 		try {
@@ -129,31 +129,33 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
 			this.library.removePhoto("DSC_001.jpg", "Fall colors");
 			this.library.removePhoto("DSC_005.jpg", "Fall colors");
 			this.library.removePhoto("DSC_007.jpg", "Colorado Springs");
-			
+
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 0);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 0);
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 0);
 
 		} catch (PhotoAlbumException pae) {
 			fail("Photo addition failed with message: "
 					+ pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRemoveNonExistantPhoto() {
 		try {
 			this.library.createAlbum("Fall colors");
 			this.library.removePhoto("DSC_001.jpg", "Fall colors");
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
-	
+
 	@Test
 	public void testMovePhoto() {
 		try {
@@ -167,19 +169,22 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
-			this.library.movePhoto("DSC_001.jpg", "Fall colors", "Colorado Springs");
-			this.library.movePhoto("DSC_005.jpg", "Fall colors", "Colorado Springs");
-			
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 3);
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
+			this.library.movePhoto("DSC_001.jpg", "Fall colors",
+					"Colorado Springs");
+			this.library.movePhoto("DSC_005.jpg", "Fall colors",
+					"Colorado Springs");
+
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 3);
 
 		} catch (PhotoAlbumException pae) {
-			fail("Photo move failed with message: "
-					+ pae.getLocalizedMessage());
+			fail("Photo move failed with message: " + pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testMoveNonExistantPhoto() {
 		try {
@@ -193,22 +198,26 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
-			this.library.movePhoto("DSC_002.jpg", "Fall colors", "Colorado Springs");
-			this.library.movePhoto("DSC_003.jpg", "Fall colors", "Colorado Springs");
-			
-			fail("Should not have not thrown an exception.");
-			
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") != 3);
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
+			this.library.movePhoto("DSC_002.jpg", "Fall colors",
+					"Colorado Springs");
+			this.library.movePhoto("DSC_003.jpg", "Fall colors",
+					"Colorado Springs");
 
 			fail("Should not have not thrown an exception.");
-			
+
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") != 3);
+
+			fail("Should not have not thrown an exception.");
+
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
-	
+
 	@Test
 	public void testAddTag() {
 		try {
@@ -222,74 +231,74 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_007.jpg", "person", "David Boyle");
-			
+
 		} catch (PhotoAlbumException pae) {
-			fail("Add tag failed with message: "
-					+ pae.getLocalizedMessage());
+			fail("Add tag failed with message: " + pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testAddTagToNonExistantPhoto() {
 		try {
 			this.library.createAlbum("Fall colors");
 			assertTrue(this.library.getNumberOfAlbums() == 1);
-			
+
 			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
-			
+
 			this.library.addTag("DSC_002.jpg", "person", "Paul Jones");
-			
+
 			fail("The last call should have thrown an exception because the photo does not exist.");
-			
+
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
-	
+
 	@Test
 	public void testAddDuplicateTag() {
 		try {
 			this.library.createAlbum("Fall colors");
 			assertTrue(this.library.getNumberOfAlbums() == 1);
-			
+
 			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
-			
+
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
-			
+
 			fail("The last call should have thrown an exception because that tag already exists.");
-			
+
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
-	
+
 	@Test
 	public void testRemoveTag() {
 		try {
 			this.library.createAlbum("Fall colors");
 			assertTrue(this.library.getNumberOfAlbums() == 1);
-			
+
 			this.library.addPhoto("DSC_001.jpg", "DSC_001", "Fall colors");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 1);
-			
+
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
 			this.library.deleteTag("DSC_001.jpg", "person", "Paul Jones");
-			
+
 		} catch (PhotoAlbumException pae) {
 			fail("Remove tag failed with message: " + pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testGetTag() {
 		try {
@@ -303,22 +312,23 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_007.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_005.jpg", "person", "Paul Jones");
-			
-			ArrayList<Photo> photosWithPaul = this.library.getPhotosByTag("person", "Paul Jones");
-			
+
+			ArrayList<Photo> photosWithPaul = this.library.getPhotosByTag(
+					"person", "Paul Jones");
+
 			assertTrue(photosWithPaul.size() == 3);
-			
+
 		} catch (PhotoAlbumException pae) {
-			fail("Add tag failed with message: "
-					+ pae.getLocalizedMessage());
+			fail("Add tag failed with message: " + pae.getLocalizedMessage());
 		}
 	}
-	
+
 	@Test
 	public void testGetNonExistantTag() {
 		try {
@@ -332,18 +342,21 @@ public class PhotoAlbumModelTest {
 			this.library.addPhoto("DSC_007.jpg", "DSC_007", "Colorado Springs");
 
 			assertTrue(this.library.getNumberOfPhotosInAlbum("Fall colors") == 2);
-			assertTrue(this.library.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
-			
+			assertTrue(this.library
+					.getNumberOfPhotosInAlbum("Colorado Springs") == 1);
+
 			this.library.addTag("DSC_001.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_007.jpg", "person", "Paul Jones");
 			this.library.addTag("DSC_005.jpg", "person", "Paul Jones");
-			
-			ArrayList<Photo> photosWithDave = this.library.getPhotosByTag("person", "David Boyle");
-			
+
+			@SuppressWarnings("unused")
+			ArrayList<Photo> photosWithDave = this.library.getPhotosByTag(
+					"person", "David Boyle");
+
 			fail("There are no photos with Dave, it should have thrown an exception.");
-			
+
 		} catch (PhotoAlbumException pae) {
-			
+
 		}
 	}
 }
