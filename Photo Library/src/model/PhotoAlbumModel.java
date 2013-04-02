@@ -6,9 +6,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class PhotoAlbumModel implements Serializable {
-	
+
 	private static final long serialVersionUID = -415407991623113747L;
-	
+
 	private Library albums;
 	public final String userId;
 	public final String userName;
@@ -37,11 +37,11 @@ public class PhotoAlbumModel implements Serializable {
 	public String getUserName() {
 		return this.userId;
 	}
-	
+
 	public String getFullName() {
 		return this.userName;
 	}
-	
+
 	/**
 	 * Deletes an old album.
 	 * 
@@ -163,30 +163,42 @@ public class PhotoAlbumModel implements Serializable {
 	/**
 	 * Gets an individual photo from the file name.
 	 * 
-	 * You will what to use this if you'd like the information contained within one photo.
+	 * You will what to use this if you'd like the information contained within
+	 * one photo.
 	 * 
 	 * @param fileName
 	 * @return
-	 * @throws PhotoAlbumException if the photo does not exist.
+	 * @throws PhotoAlbumException
+	 *             if the photo does not exist.
 	 */
 	public Photo getPhoto(String fileName) throws PhotoAlbumException {
 		return this.albums.getPhoto(fileName);
 	}
-	
+
 	/**
 	 * 
 	 * @param fileName
 	 * @return
-	 * @throws PhotoAlbumException printable string for a photo filename
+	 * @throws PhotoAlbumException
+	 *             printable string for a photo filename
 	 */
 	public String getPhotoInfo(String fileName) {
 		String str;
 		if (this.albums.hasPhoto(fileName)) {
 			try {
-			str = "Photo file info: " + fileName + "\n";
-			str+= "Album: " + this.getAlbumFromPhoto(fileName) + "\n";
-			str+= "Date: " + this.getPhoto(fileName).dateCreated.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + "\n";
-			str+= "Tags: " + this.getPhoto(fileName).getPrintableTags();
+				str = "Photo file info: " + fileName + "\n";
+				str += "Album: " + this.getAlbumFromPhoto(fileName) + "\n";
+				str += "Date: "
+						+ this.getPhoto(fileName).dateCreated.getDisplayName(
+								Calendar.MONTH, Calendar.LONG,
+								Locale.getDefault())
+						+ this.getPhoto(fileName).dateCreated.getDisplayName(
+								Calendar.DATE, Calendar.LONG,
+								Locale.getDefault())
+						+ this.getPhoto(fileName).dateCreated.getDisplayName(
+								Calendar.YEAR, Calendar.LONG,
+								Locale.getDefault()) + "\n";
+				str += "Tags: " + this.getPhoto(fileName).getPrintableTags();
 			} catch (Exception e) {
 				str = "Photo <" + fileName + "> does not exist";
 			}
@@ -194,12 +206,12 @@ public class PhotoAlbumModel implements Serializable {
 		} else {
 			str = "Photo <" + fileName + "> does not exist";
 		}
-		
+
 		return str;
 	}
 
-	
-	protected String getAlbumFromPhoto(String fileName) throws PhotoAlbumException {
+	protected String getAlbumFromPhoto(String fileName)
+			throws PhotoAlbumException {
 		if (this.albums.hasPhoto(fileName)) {
 			ArrayList<String> albumNames = this.getAlbumNames();
 			for (int i = 0; i < this.getNumberOfAlbums(); i++) {
@@ -207,22 +219,24 @@ public class PhotoAlbumModel implements Serializable {
 					return this.getAlbum(albumNames.get(i)).albumName;
 				}
 			}
-		} else throw new PhotoAlbumException("That photo does not exist.");
-		
+		} else
+			throw new PhotoAlbumException("That photo does not exist.");
+
 		return null;
 	}
-	
+
 	/*
 	 * Tag methods
 	 */
-	
+
 	/**
 	 * This gets a photo and adds a tag with the inputted values.
 	 * 
 	 * @param fileName
 	 * @param tagType
 	 * @param tagValue
-	 * @throws PhotoAlbumException if the photo does not exist or the tag already exists.
+	 * @throws PhotoAlbumException
+	 *             if the photo does not exist or the tag already exists.
 	 */
 	public void addTag(String fileName, String tagType, String tagValue)
 			throws PhotoAlbumException {
@@ -235,7 +249,8 @@ public class PhotoAlbumModel implements Serializable {
 	 * @param fileName
 	 * @param tagType
 	 * @param tagValue
-	 * @throws PhotoAlbumException if the tag or the photo DNE
+	 * @throws PhotoAlbumException
+	 *             if the tag or the photo DNE
 	 */
 	public void deleteTag(String fileName, String tagType, String tagValue)
 			throws PhotoAlbumException {
@@ -245,24 +260,30 @@ public class PhotoAlbumModel implements Serializable {
 	/**
 	 * To retrieve photos between two dates.
 	 * 
-	 * @param first the date which you want every photo "after"
-	 * @param second the date which you want every photo "before"
+	 * @param first
+	 *            the date which you want every photo "after"
+	 * @param second
+	 *            the date which you want every photo "before"
 	 * @return
-	 * @throws PhotoAlbumException if there are no photos in that ranged
+	 * @throws PhotoAlbumException
+	 *             if there are no photos in that ranged
 	 */
-	public ArrayList<Photo> getPhotosInRange(Calendar first, Calendar second) throws PhotoAlbumException {
+	public ArrayList<Photo> getPhotosInRange(Calendar first, Calendar second)
+			throws PhotoAlbumException {
 		return this.albums.getPhotosInRange(first, second);
 	}
-	
+
 	/**
 	 * Returns an array list with every photo with a given tag.
 	 * 
 	 * @param tagType
 	 * @param tagValue
 	 * @return
-	 * @throws PhotoAlbumException if the tag does not exist
+	 * @throws PhotoAlbumException
+	 *             if the tag does not exist
 	 */
-	public ArrayList<Photo> getPhotosByTag(String tagType, String tagValue) throws PhotoAlbumException {
+	public ArrayList<Photo> getPhotosByTag(String tagType, String tagValue)
+			throws PhotoAlbumException {
 		return this.albums.getPhotosByTag(tagType, tagValue);
 	}
 }

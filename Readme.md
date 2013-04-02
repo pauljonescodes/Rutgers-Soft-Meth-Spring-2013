@@ -1,7 +1,7 @@
 Software Methodology Spring 2013 with Professor Sesh Venugopal
 ==============================================================
 
-All use of this code must be consistent with the [DCS Academic Integrity Policy](http://www.cs.rutgers.edu/policies/academicintegrity/index.php).
+All use of this code must be consistent with the [DCS Academic Integrity Policy](http://www.cs.rutgers.edu/policies/academicintegrity/index.php) and the [Rutgers University Code of Student Conduct](http://eden.rutgers.edu/%7Epmj34/media/AcademicIntegrity.pdf).
 
 Chess
 -----
@@ -23,3 +23,9 @@ Song Library
 A basic GUI which imitates a "song library" by allowing the user to enter songs.
 
 For more information, you can read the [project description](http://eden.rutgers.edu/~pmj34/?page=%2FNotes%2FComputer%20Science%2F%2FSoftware%20Methodology.md#February7th,2013-Assignment1:SongLibraryGUIDesignandImplementation).
+
+UML Assignment
+--------------
+
+A UML diagram for a web discussion group written in LaTeX.
+
